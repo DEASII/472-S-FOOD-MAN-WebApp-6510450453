@@ -1,5 +1,8 @@
 FROM openjdk:21-jdk-slim
 
+# ติดตั้ง bash
+RUN apt-get update && apt-get install -y bash
+
 WORKDIR /app
 
 COPY . /app
@@ -12,4 +15,5 @@ RUN ./mvnw dependency:resolve
 
 RUN ./mvnw package -DskipTests
 
-CMD ./wait-for-it.sh my-mysql:3306 -- java -jar target/restaurant-0.0.1-SNAPSHOT.jar
+# ใช้ bash แทน sh
+ENTRYPOINT ["bash", "wait-for-it.sh", "my-mysql:3306", "--", "java", "-jar", "target/restaurant-0.0.1-SNAPSHOT.jar"]
